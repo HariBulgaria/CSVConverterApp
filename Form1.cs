@@ -7,7 +7,6 @@ namespace CSVConverterApp
 {
     public partial class Form1 : Form
     {
-        string filePath = "C:\\Users\\Students\\Documents\\output.csv"; //To make custom
         string fileLoc = "";
         List<string> txtLines = new List<string>();
         bool ender = false;
@@ -48,7 +47,7 @@ namespace CSVConverterApp
                         workbook.LoadFromFile(fileLoc);
                         Worksheet sheet = workbook.Worksheets[0];
                         sheet.SaveToFile("ExceltoTxt.txt", ",", Encoding.UTF8);
-                        using (StreamReader sr = new StreamReader("ExceltoTxt.txt"))
+                        using (StreamReader sr = new StreamReader("ExceltoTxt.txt", Encoding.UTF8))
                         {
                             string line = "";
                             while (true)
@@ -110,7 +109,7 @@ namespace CSVConverterApp
                 if (textBox3.Text == string.Empty) throw new NullNameException();
                 txtLines.Clear();
                 txtLines = contentVisualizer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{textBox3.Text}.csv"))
+                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{textBox3.Text}.csv", false, Encoding.UTF8))
                 {
                     foreach (var row in txtLines)
                     {
@@ -141,7 +140,7 @@ namespace CSVConverterApp
                 if (textBox3.Text == string.Empty) throw new NullNameException();
                 txtLines.Clear();
                 txtLines = contentVisualizer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{textBox3.Text}.txt"))
+                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{textBox3.Text}.txt", false, Encoding.UTF8-))
                 {
                     foreach (var row in txtLines)
                     {
