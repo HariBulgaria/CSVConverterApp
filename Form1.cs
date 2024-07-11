@@ -28,6 +28,7 @@ namespace CSVConverterApp
         {
             if (!ender)
             {
+                txtLines.Clear();
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 if (files.Length > 0)
@@ -36,11 +37,13 @@ namespace CSVConverterApp
 
                     if (IsValidExcelFile(fileLoc))
                     {
+                        this.AllowDrop = false;
                         contentVisualizer.Visible = true;
                         dragTextLabel.Visible = false;
                         SaveAsButton.Visible = true;
+                        discardButton.Visible = true;
                         errorLabel.Visible = false;
-                        textBox1.Enabled = false;
+                        dialogTextBox.Enabled = false;
                         browseFiles.Enabled = false;
                         dialogSelectButton.Enabled = false;
                         Workbook workbook = new Workbook();
@@ -102,14 +105,14 @@ namespace CSVConverterApp
             return ext == ".xlsx" || ext == ".xls";
         }
 
-        private void csvButton_Click(object sender, EventArgs e)
+        private async void csvButton_Click(object sender, EventArgs e)
         {
             try
             {
-                if (textBox3.Text == string.Empty) throw new NullNameException();
+                if (fileNameTextBox.Text == string.Empty) throw new NullNameException();
                 txtLines.Clear();
                 txtLines = contentVisualizer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{textBox3.Text}.csv", false, Encoding.UTF8))
+                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{fileNameTextBox.Text}.csv", false, Encoding.UTF8))
                 {
                     foreach (var row in txtLines)
                     {
@@ -121,6 +124,18 @@ namespace CSVConverterApp
                     }
                 }
                 errorLabel2.Visible = false;
+                notifLabel.Visible = true;
+                notifLabel.Text = "Successfully made the .csv file!";
+                csvButton.Enabled = false;
+                txtButton.Enabled = false;
+                fileNameTextBox.Enabled = false;
+                discardButton.Enabled = false;
+                await Task.Delay(3000);
+                notifLabel.Visible = false;
+                csvButton.Enabled = true;
+                txtButton.Enabled = true;
+                fileNameTextBox.Enabled = true;
+                discardButton.Enabled = true;
             }
             catch (NullNameException)
             {
@@ -133,14 +148,14 @@ namespace CSVConverterApp
                 errorLabel2.Visible = true;
             }
         }
-        private void txtButton_Click(object sender, EventArgs e)
+        private async void txtButton_Click(object sender, EventArgs e)
         {
             try
             {
-                if (textBox3.Text == string.Empty) throw new NullNameException();
+                if (fileNameTextBox.Text == string.Empty) throw new NullNameException();
                 txtLines.Clear();
                 txtLines = contentVisualizer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{textBox3.Text}.txt", false, Encoding.UTF8-))
+                using (StreamWriter sw = new StreamWriter($"{downloadsFolderPath}\\{fileNameTextBox.Text}.txt", false, Encoding.UTF8))
                 {
                     foreach (var row in txtLines)
                     {
@@ -152,6 +167,19 @@ namespace CSVConverterApp
                     }
                 }
                 errorLabel2.Visible = false;
+                notifLabel.Visible = true;
+                notifLabel.Text = "Successfully made the .txt file!";
+                notifLabel.Visible = true;
+                csvButton.Enabled = false;
+                txtButton.Enabled = false;
+                fileNameTextBox.Enabled = false;
+                discardButton.Enabled = false;
+                await Task.Delay(3000);
+                csvButton.Enabled = true;
+                txtButton.Enabled = true;
+                fileNameTextBox.Enabled = true;
+                notifLabel.Visible = false;
+                discardButton.Enabled = true;
             }
             catch (NullNameException)
             {
@@ -175,7 +203,7 @@ namespace CSVConverterApp
             fdlg.RestoreDirectory = true;
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
-                textBox1.Text = fdlg.FileName;
+                dialogTextBox.Text = fdlg.FileName;
             }
         }
 
@@ -183,16 +211,21 @@ namespace CSVConverterApp
         {
             if (!ender)
             {
-                if (IsValidExcelFile(textBox1.Text))
+                txtLines.Clear();
+                if (IsValidExcelFile(dialogTextBox.Text))
                 {
-                    fileLoc = textBox1.Text;
+                    this.AllowDrop = false;
+                    fileLoc = dialogTextBox.Text;
                     contentVisualizer.Visible = true;
                     dragTextLabel.Visible = false;
                     SaveAsButton.Visible = true;
+                    discardButton.Visible = true;
                     errorLabel.Visible = false;
-                    textBox1.Enabled = false;
+                    dialogTextBox.Enabled = false;
+                    dialogSelectButton.Enabled = false;
+                    browseFiles.Enabled = false;
                     Workbook workbook = new Workbook();
-                    workbook.LoadFromFile(textBox1.Text);
+                    workbook.LoadFromFile(dialogTextBox.Text);
                     Worksheet sheet = workbook.Worksheets[0];
                     sheet.SaveToFile("ExceltoTxt.txt", ",", Encoding.UTF8);
                     using (StreamReader sr = new StreamReader("ExceltoTxt.txt"))
@@ -227,9 +260,38 @@ namespace CSVConverterApp
         {
             csvButton.Visible = true;
             txtButton.Visible = true;
-            textBox3.Visible = true;
-            label1.Visible = true;
-            label2.Visible = true;
+            fileNameTextBox.Visible = true;
+            fileNameLabel.Visible = true;
+            infoLabel.Visible = true;
+            SaveAsButton.Enabled = false;
+        }
+
+        private async void notifLabel_VisibleChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void discardButton_Click(object sender, EventArgs e)
+        {
+            contentVisualizer.Text = string.Empty;
+            contentVisualizer.Visible = false; 
+            SaveAsButton.Visible = false;
+            discardButton.Visible = false;
+            dragTextLabel.Visible = true;
+
+            csvButton.Visible = false;
+            txtButton.Visible = false;
+            fileNameTextBox.Visible = false;
+            fileNameLabel.Visible = false;
+            infoLabel.Visible = false;
+
+            SaveAsButton.Enabled = true;
+            browseFiles.Enabled = true;
+            dialogSelectButton.Enabled = true;
+            dialogTextBox.Enabled = true;
+
+            ender = false;
+            this.AllowDrop = true;
         }
     }
 }

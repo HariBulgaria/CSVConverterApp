@@ -35,14 +35,16 @@
             txtButton = new Button();
             folderBrowserDialog1 = new FolderBrowserDialog();
             browseFiles = new Button();
-            textBox1 = new TextBox();
+            dialogTextBox = new TextBox();
             dialogSelectButton = new Button();
             contentVisualizer = new RichTextBox();
             SaveAsButton = new Button();
-            textBox3 = new TextBox();
-            label1 = new Label();
-            label2 = new Label();
+            fileNameTextBox = new TextBox();
+            fileNameLabel = new Label();
+            infoLabel = new Label();
             errorLabel2 = new Label();
+            notifLabel = new Label();
+            discardButton = new Button();
             SuspendLayout();
             // 
             // openFileDialog1
@@ -112,20 +114,20 @@
             browseFiles.Font = new Font("Times New Roman", 10F);
             browseFiles.Location = new Point(12, 12);
             browseFiles.Name = "browseFiles";
-            browseFiles.Size = new Size(75, 23);
+            browseFiles.Size = new Size(87, 23);
             browseFiles.TabIndex = 5;
             browseFiles.Text = "Browse";
             browseFiles.UseVisualStyleBackColor = false;
             browseFiles.Click += browseFiles_Click;
             // 
-            // textBox1
+            // dialogTextBox
             // 
-            textBox1.BackColor = Color.Linen;
-            textBox1.Cursor = Cursors.IBeam;
-            textBox1.Location = new Point(108, 12);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(479, 23);
-            textBox1.TabIndex = 6;
+            dialogTextBox.BackColor = Color.Linen;
+            dialogTextBox.Cursor = Cursors.IBeam;
+            dialogTextBox.Location = new Point(108, 12);
+            dialogTextBox.Name = "dialogTextBox";
+            dialogTextBox.Size = new Size(479, 23);
+            dialogTextBox.TabIndex = 6;
             // 
             // dialogSelectButton
             // 
@@ -164,40 +166,40 @@
             SaveAsButton.Visible = false;
             SaveAsButton.Click += SaveAsButton_Click;
             // 
-            // textBox3
+            // fileNameTextBox
             // 
-            textBox3.BackColor = Color.Linen;
-            textBox3.Cursor = Cursors.IBeam;
-            textBox3.Location = new Point(108, 160);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(134, 23);
-            textBox3.TabIndex = 12;
-            textBox3.Visible = false;
+            fileNameTextBox.BackColor = Color.Linen;
+            fileNameTextBox.Cursor = Cursors.IBeam;
+            fileNameTextBox.Location = new Point(108, 160);
+            fileNameTextBox.Name = "fileNameTextBox";
+            fileNameTextBox.Size = new Size(134, 23);
+            fileNameTextBox.TabIndex = 12;
+            fileNameTextBox.Visible = false;
             // 
-            // label1
+            // fileNameLabel
             // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Times New Roman", 11F);
-            label1.Location = new Point(31, 160);
-            label1.Name = "label1";
-            label1.Size = new Size(68, 17);
-            label1.TabIndex = 13;
-            label1.Text = "File name:";
-            label1.Visible = false;
+            fileNameLabel.AutoSize = true;
+            fileNameLabel.BackColor = Color.Transparent;
+            fileNameLabel.Font = new Font("Times New Roman", 11F);
+            fileNameLabel.Location = new Point(31, 160);
+            fileNameLabel.Name = "fileNameLabel";
+            fileNameLabel.Size = new Size(68, 17);
+            fileNameLabel.TabIndex = 13;
+            fileNameLabel.Text = "File name:";
+            fileNameLabel.Visible = false;
             // 
-            // label2
+            // infoLabel
             // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Times New Roman", 11F);
-            label2.ForeColor = Color.DarkSlateGray;
-            label2.Location = new Point(308, 207);
-            label2.Name = "label2";
-            label2.Size = new Size(320, 17);
-            label2.TabIndex = 14;
-            label2.Text = "Your document can be found in the downloads folder.";
-            label2.Visible = false;
+            infoLabel.AutoSize = true;
+            infoLabel.BackColor = Color.Transparent;
+            infoLabel.Font = new Font("Times New Roman", 11F);
+            infoLabel.ForeColor = Color.DarkSlateGray;
+            infoLabel.Location = new Point(308, 207);
+            infoLabel.Name = "infoLabel";
+            infoLabel.Size = new Size(320, 17);
+            infoLabel.TabIndex = 14;
+            infoLabel.Text = "Your document can be found in the downloads folder.";
+            infoLabel.Visible = false;
             // 
             // errorLabel2
             // 
@@ -212,20 +214,48 @@
             errorLabel2.Text = "error";
             errorLabel2.Visible = false;
             // 
+            // notifLabel
+            // 
+            notifLabel.AutoSize = true;
+            notifLabel.ForeColor = Color.OliveDrab;
+            notifLabel.Location = new Point(308, 189);
+            notifLabel.Name = "notifLabel";
+            notifLabel.Size = new Size(68, 15);
+            notifLabel.TabIndex = 16;
+            notifLabel.Text = "notification";
+            notifLabel.Visible = false;
+            notifLabel.VisibleChanged += notifLabel_VisibleChanged;
+            // 
+            // discardButton
+            // 
+            discardButton.BackColor = Color.NavajoWhite;
+            discardButton.FlatStyle = FlatStyle.Popup;
+            discardButton.Font = new Font("Times New Roman", 12F);
+            discardButton.Location = new Point(685, 189);
+            discardButton.Name = "discardButton";
+            discardButton.Size = new Size(87, 35);
+            discardButton.TabIndex = 17;
+            discardButton.Text = "Discard";
+            discardButton.UseVisualStyleBackColor = false;
+            discardButton.Visible = false;
+            discardButton.Click += discardButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.PapayaWhip;
             ClientSize = new Size(784, 461);
+            Controls.Add(discardButton);
+            Controls.Add(notifLabel);
             Controls.Add(errorLabel2);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(textBox3);
+            Controls.Add(infoLabel);
+            Controls.Add(fileNameLabel);
+            Controls.Add(fileNameTextBox);
             Controls.Add(SaveAsButton);
             Controls.Add(contentVisualizer);
             Controls.Add(dialogSelectButton);
-            Controls.Add(textBox1);
+            Controls.Add(dialogTextBox);
             Controls.Add(browseFiles);
             Controls.Add(txtButton);
             Controls.Add(errorLabel);
@@ -251,13 +281,15 @@
         private Button txtButton;
         private FolderBrowserDialog folderBrowserDialog1;
         private Button browseFiles;
-        private TextBox textBox1;
+        private TextBox dialogTextBox;
         private Button dialogSelectButton;
         private RichTextBox contentVisualizer;
         private Button SaveAsButton;
-        private TextBox textBox3;
-        private Label label1;
-        private Label label2;
+        private TextBox fileNameTextBox;
+        private Label fileNameLabel;
+        private Label infoLabel;
         private Label errorLabel2;
+        private Label notifLabel;
+        private Button discardButton;
     }
 }
